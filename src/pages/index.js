@@ -3,13 +3,30 @@ import Image from "next/image";
 import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { insertBook } from "@/utils/supabase";
+import { useEffect, useState } from "react";
+import { getBooks, insertBook } from "@/utils/supabase";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const router = useRouter();
+
+  const [books, setBooks] = useState([]);
+
+  // Function to fetch books from Supabase and update state
+  const fetchBooks = async () => {
+    const { data, error } = await getBooks(); // Assuming you have a function to fetch books from Supabase
+    if (error) {
+      console.error("Error fetching books:", error.message);
+    } else {
+      setBooks(data);
+    }
+  };
+
+  useEffect(() => {
+    fetchBooks(); // Fetch books when component mounts
+  }, [])
+
   const [bookData, setBookData] = useState({
     book_name: '',
     author: '',
@@ -23,10 +40,19 @@ export default function Home() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    //e.preventDefault();
+    if (bookData.book_name == '' || bookData.author == '' || bookData.genre == ''){
+      return
+    }
     const data = await insertBook(bookData);
     if (data) {
-      router.push('/'); // Redirect to homepage after successful submission
+      setBookData({
+        book_name: '',
+        author: '',
+        genre: '',
+        copies_given: 0
+      })
+      fetchBooks() // Redirect to homepage after successful submission
     } else {
       // Handle error
     }
@@ -43,34 +69,16 @@ export default function Home() {
       <main className={`${styles.main} ${inter.className}`}>
         <div className={styles.description}>
           <p>
-            Get started by editing&nbsp;
-            <code className={styles.code}>src/pages/index.js</code>
+            <code className={styles.code}>Книги</code>
           </p>
-          <div>
-            <a
-              href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              By{" "}
-              <Image
-                src="/library_database/vercel.svg"
-                alt="Vercel Logo"
-                className={styles.vercelLogo}
-                width={100}
-                height={24}
-                priority
-              />
-            </a>
-          </div>
         </div>
 
         <div className={styles.center}>
-          <div>
-            <h1>Add Book</h1>
-            <form onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="book_name">Book Name:</label>
+          <div className={styles.add}>
+            <h2>Добавить книгу</h2>
+            <form onSubmit={handleSubmit} className={styles.form}>
+              <div className={styles.row}>
+                <label htmlFor="book_name">Название книги:</label>
                 <input
                   type="text"
                   id="book_name"
@@ -79,8 +87,8 @@ export default function Home() {
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <label htmlFor="author">Author:</label>
+              <div className={styles.row}>
+                <label htmlFor="author">Автор:</label>
                 <input
                   type="text"
                   id="author"
@@ -89,8 +97,8 @@ export default function Home() {
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <label htmlFor="genre">Genre:</label>
+              <div className={styles.row}>
+                <label htmlFor="genre">Жанр:</label>
                 <input
                   type="text"
                   id="genre"
@@ -99,8 +107,8 @@ export default function Home() {
                   onChange={handleChange}
                 />
               </div>
-              <div>
-                <label htmlFor="copies_given">Copies Given:</label>
+              <div className={styles.row}>
+                <label htmlFor="copies_given">Выдача:</label>
                 <input
                   type="number"
                   id="copies_given"
@@ -109,8 +117,27 @@ export default function Home() {
                   onChange={handleChange}
                 />
               </div>
-              <button type="submit">Add Book</button>
+              <button type="submit" className={styles.button}>Добавить</button>
             </form>
+          </div>
+          <div className={styles.list}>
+            <h2>Книги:</h2>
+            <div className={styles.books}>
+              <div className={styles.table_row} id={styles.table_head}>
+                  <p className={styles.bold}>Название</p>
+                  <p className={styles.bold}>Автор</p>
+                  <p className={styles.bold}>Жанр</p>
+                  <p className={styles.bold}>Выдано</p>
+              </div>
+              {books.map((book) => (
+                <div key={book.id} className={styles.table_row}>
+                  <p>{book.book_name}</p>
+                  <p>{book.author}</p>
+                  <p>{book.genre}</p>
+                  <p>{book.copies_given}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

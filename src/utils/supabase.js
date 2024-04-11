@@ -15,4 +15,20 @@ export const insertBook = async (bookData) => {
   }
   
   return data;
-};
+}
+
+export const getBooks = async () => {
+  try {
+    const { data, error } = await supabase
+      .from('books')
+      .select('*');
+    
+    if (error) {
+      throw error;
+    }
+
+    return { data };
+  } catch (error) {
+    return { error };
+  }
+}

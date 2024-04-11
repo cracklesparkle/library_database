@@ -74,6 +74,8 @@
 
 .center {
   display: flex;
+  flex-direction: column;
+  gap: 24px;
   justify-content: center;
   align-items: center;
   position: relative;
@@ -109,6 +111,72 @@
 .logo {
   position: relative;
 }
+
+.add{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  border-radius: var(--border-radius);
+  padding: 16px;
+  background: rgba(var(--card-rgb), 0.1);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+}
+
+.button{
+  border-radius: var(--border-radius);
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  background: rgba(var(--card-rgb), 0.1);
+  cursor: pointer;
+  transition: background 200ms, border 200ms;
+}
+
+.button:hover{
+  background: rgba(8, 133, 255, 0.3);
+}
+
+.form{
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.list{
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.books{
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--border-radius);
+  padding: 16px;
+  background: rgba(var(--card-rgb), 0.1);
+  border: 1px solid rgba(var(--card-border-rgb), 0.15);
+  gap: 16px;
+}
+
+.bold{
+  font-weight: 600;
+}
+
+#table_head{
+  margin-bottom: 16px;
+}
+
+.table_row{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 16px;
+}
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {
