@@ -7,7 +7,7 @@ const supabase = createClient(supabaseUrl, supabaseKey);
 export const insertBook = async (bookData) => {
   const { data, error } = await supabase
     .from('books')
-    .insert([bookData]);
+    .insert(bookData);
   
   if (error) {
     console.error('Error inserting book:', error.message);

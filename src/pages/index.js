@@ -70,11 +70,11 @@ export default function Home() {
             <h1>Add Book</h1>
             <form onSubmit={handleSubmit}>
               <div>
-                <label htmlFor="bookName">Book Name:</label>
+                <label htmlFor="book_name">Book Name:</label>
                 <input
                   type="text"
-                  id="bookName"
-                  name="bookName"
+                  id="book_name"
+                  name="book_name"
                   value={bookData.book_name}
                   onChange={handleChange}
                 />
@@ -100,11 +100,11 @@ export default function Home() {
                 />
               </div>
               <div>
-                <label htmlFor="copiesGiven">Copies Given:</label>
+                <label htmlFor="copies_given">Copies Given:</label>
                 <input
                   type="number"
-                  id="copiesGiven"
-                  name="copiesGiven"
+                  id="copies_given"
+                  name="copies_given"
                   value={bookData.copies_given}
                   onChange={handleChange}
                 />
