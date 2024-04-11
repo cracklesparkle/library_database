@@ -11,10 +11,10 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const router = useRouter();
   const [bookData, setBookData] = useState({
-    bookName: '',
+    book_name: '',
     author: '',
     genre: '',
-    copiesGiven: 0
+    copies_given: 0
   });
 
   const handleChange = (e) => {
@@ -75,7 +75,7 @@ export default function Home() {
                   type="text"
                   id="bookName"
                   name="bookName"
-                  value={bookData.bookName}
+                  value={bookData.book_name}
                   onChange={handleChange}
                 />
               </div>
@@ -105,7 +105,7 @@ export default function Home() {
                   type="number"
                   id="copiesGiven"
                   name="copiesGiven"
-                  value={bookData.copiesGiven}
+                  value={bookData.copies_given}
                   onChange={handleChange}
                 />
               </div>
