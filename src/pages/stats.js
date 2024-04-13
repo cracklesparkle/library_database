@@ -12,7 +12,7 @@ import { Inter } from "next/font/google";
 
 const inter = Inter({ subsets: ["latin"] });
 
-export default function Home() {
+export default function Stats() {
   const router = useRouter();
 
   const [lends, setLends] = useState([]);
@@ -100,6 +100,11 @@ export default function Home() {
     return book ? book.book_name : 'Unknown';
   };
 
+  // Function to get the number of times a book has been lent out
+  const getLendCount = (bookId) => {
+    return lends.filter(lend => lend.book_id === bookId).length;
+  };
+
   return (
     <>
       <Head>
@@ -125,70 +130,17 @@ export default function Home() {
         </div>
 
         <div className={styles.center}>
-          <div className={styles.add}>
-            <h2>Выдача книги</h2>
-            <form onSubmit={handleSubmit} className={styles.form}>
-              <div className={styles.row}>
-                <label htmlFor="book_id">Название книги:</label>
-                <select
-                  id="book_id"
-                  name="book_id"
-                  value={lendData.book_id}
-                  onChange={handleChange}
-                >
-                  <option value="">Выберите книгу</option>
-                  {books.map((book) => (
-                    <option key={book.id} value={book.id}>{book.book_name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className={styles.row}>
-                <label htmlFor="profile_id">Пользователь:</label>
-                <select
-                  id="profile_id"
-                  name="profile_id"
-                  value={lendData.profile_id}
-                  onChange={handleChange}
-                >
-                  <option value="">Выберите пользователя</option>
-                  {profiles.map((profile) => (
-                    <option key={profile.id} value={profile.id}>{profile.first_name} {profile.last_name}</option>
-                  ))}
-                </select>
-              </div>
-              <div className={styles.row}>
-                <label htmlFor="lend_date">Дата выдачи:</label>
-                <input
-                  type="date"
-                  id="lend_date"
-                  name="lend_date"
-                  value={lendData.lend_date}
-                  onChange={handleChange}
-                />
-              </div>
-              <button type="submit" className={styles.button}>Добавить</button>
-            </form>
-          </div>
           <div className={styles.list}>
             <h2>Выданные книги:</h2>
             <div className={styles.books}>
-              <div className={styles.table_row + ' ' + styles.lend_head} id={styles.table_head}>
+              <div className={styles.table_row} id={styles.table_head}>
                 <p className={styles.bold}>Книга</p>
-                <p className={styles.bold}>Пользователь</p>
-                <p className={styles.bold}>Дата выдачи</p>
-                <p className={styles.bold}>Дата возврата</p>
+                <p className={styles.bold}>Количество выдач</p>
               </div>
-              {lends.map((lend) => (
-                <div key={lend.id} className={styles.table_row} id={styles.lend_table_row}>
-                  <p>{getBookName(lend.book_id)}</p>
-                  <p>{lend.profile_id}</p>
-                  <p>{lend.lend_date}</p>
-                  <p>{lend.return_date}</p>
-                  <div className={styles.icon} onClick={() => {
-                    handleLendDelete(lend.id)
-                  }}>
-                    <Image width={16} height={16} src={icon_remove} />
-                  </div>
+              {books.map((book) => (
+                <div key={book.id} className={styles.table_row}>
+                  <p>{book.book_name}</p>
+                  <p>{getLendCount(book.id)}</p>
                 </div>
               ))}
             </div>

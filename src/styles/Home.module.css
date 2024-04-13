@@ -179,6 +179,23 @@
   column-gap: 16px;
 }
 
+#lend_table_row{
+  grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 32px;
+}
+
+.lend_head{
+  grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 32px;
+}
+
+#book_table_row{
+  grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 32px 32px;
+}
+
+.book_head{
+  grid-template-columns: minmax(100px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr) 32px 32px;
+
+}
+
 .icon{
   display: flex;
   justify-content: center;
