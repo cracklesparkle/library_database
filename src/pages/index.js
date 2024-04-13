@@ -4,7 +4,10 @@ import { Inter } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { getBooks, insertBook } from "@/utils/supabase";
+import { deleteBook, getBooks, insertBook } from "@/utils/supabase";
+import icon_edit from '@/assets/icons/edit.svg'
+import icon_remove from '@/assets/icons/remove.svg'
+import BookEdit from "@/components/modals/BookEdit";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -31,7 +34,7 @@ export default function Home() {
     book_name: '',
     author: '',
     genre: '',
-    copies_given: 0
+    lend_date: new Date().toISOString().split('T')[0]
   });
 
   const handleChange = (e) => {
@@ -40,23 +43,32 @@ export default function Home() {
   };
 
   const handleSubmit = async (e) => {
-    //e.preventDefault();
-    if (bookData.book_name == '' || bookData.author == '' || bookData.genre == ''){
+    e.preventDefault();
+    if (bookData.book_name == '' || bookData.author == '' || bookData.genre == '') {
       return
     }
-    const data = await insertBook(bookData);
-    if (data) {
-      setBookData({
-        book_name: '',
-        author: '',
-        genre: '',
-        copies_given: 0
+    const data = await insertBook(bookData)
+      .then(response => {
+        setBookData({
+          book_name: '',
+          author: '',
+          genre: '',
+          lend_date: null
+        })
+        fetchBooks()
       })
-      fetchBooks() // Redirect to homepage after successful submission
-    } else {
-      // Handle error
-    }
   };
+
+  const [currentBookData, setCurrentBookData] = useState(null)
+
+  const [editModal, setEditModal] = useState(false)
+
+  const handleBookDelete = async (id) => {
+    const data = await deleteBook(id)
+      .then(response => {
+        fetchBooks()
+      })
+  }
 
   return (
     <>
@@ -67,6 +79,10 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className={`${styles.main} ${inter.className}`}>
+        {editModal &&
+          <BookEdit active={editModal} setActive={setEditModal} bookData={currentBookData} />
+        }
+
         <div className={styles.description}>
           <p>
             <code className={styles.code}>Книги</code>
@@ -108,12 +124,12 @@ export default function Home() {
                 />
               </div>
               <div className={styles.row}>
-                <label htmlFor="copies_given">Выдача:</label>
+                <label htmlFor="lend_date">Дата выдачи:</label>
                 <input
-                  type="number"
-                  id="copies_given"
-                  name="copies_given"
-                  value={bookData.copies_given}
+                  type="date"
+                  id="lend_date"
+                  name="lend_date"
+                  value={bookData.lend_date}
                   onChange={handleChange}
                 />
               </div>
@@ -124,17 +140,28 @@ export default function Home() {
             <h2>Книги:</h2>
             <div className={styles.books}>
               <div className={styles.table_row} id={styles.table_head}>
-                  <p className={styles.bold}>Название</p>
-                  <p className={styles.bold}>Автор</p>
-                  <p className={styles.bold}>Жанр</p>
-                  <p className={styles.bold}>Выдано</p>
+                <p className={styles.bold}>Название</p>
+                <p className={styles.bold}>Автор</p>
+                <p className={styles.bold}>Жанр</p>
+                <p className={styles.bold}>Дата выдачи</p>
               </div>
               {books.map((book) => (
                 <div key={book.id} className={styles.table_row}>
                   <p>{book.book_name}</p>
                   <p>{book.author}</p>
                   <p>{book.genre}</p>
-                  <p>{book.copies_given}</p>
+                  <p>{book.lend_date}</p>
+                  <div className={styles.icon} onClick={() => {
+                    setCurrentBookData(book)
+                    setEditModal(true)
+                  }}>
+                    <Image width={16} height={16} src={icon_edit} />
+                  </div>
+                  <div className={styles.icon} onClick={() => {
+                    handleBookDelete(book.id)
+                  }}>
+                    <Image width={16} height={16} src={icon_remove} />
+                  </div>
                 </div>
               ))}
             </div>

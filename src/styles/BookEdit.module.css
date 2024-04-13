@@ -1,0 +1,65 @@
+.bookEdit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, .3);
+    backdrop-filter: blur(2px);
+}
+
+.edit_container {
+    padding: 16px;
+    width: fit-content;
+    height: auto;
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    border-radius: 12px;
+    background-color: rgba(0, 0, 0, .7);
+    backdrop-filter: blur(2px);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    gap: 16px;
+}
+
+.button {
+    border-radius: var(--border-radius);
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid rgba(var(--card-border-rgb), 0.15);
+    background: rgba(var(--card-rgb), 0.1);
+    cursor: pointer;
+    transition: background 200ms, border 200ms;
+}
+
+.button:hover {
+    background: rgba(8, 133, 255, 0.3);
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+}
+
+.header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+}
